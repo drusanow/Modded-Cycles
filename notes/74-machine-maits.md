@@ -130,7 +130,7 @@ Ce sera une PR à part, avec la feature dans `os.json` (`experimental`).
    repères), réglage et molette, enregistrements, potards de l'écran principal, machine hors limites, petite icône ;
 3. son : `mi_fill` reçoit les cadrans, la note et le trig du §4, et le bloc à 48 kHz est **exactement** le demi-bande
    de sa sortie, à chaque bloc ; la chaîne d'ampli lit la voix comme TONE jusqu'au silence ; les dix moteurs sonnent
-   et diffèrent ; les moteurs accordés (WSHP, FM, PD, CHIP, NOIS, STRG) à leur note à 10 cents près ; changement de
+   et diffèrent ; les moteurs accordés (WSHP, FM, PD, CHIP, MODL, STRG) à leur note à 10 cents près ; changement de
    moteur depuis le repos ; bornes ;
 4. le stock inchangé, les machines d'origine identiques au stock ; p-locks ; six pistes ; pistes mêlées ;
 5. charge : instructions par bloc par moteur, voix muette, TONE ; la pile ;
@@ -141,18 +141,36 @@ Unicorn nu contre la machine PLAITS de la Plaits Edition dans son propre émulat
 de phase forcé au même nombre des deux côtés, dix moteurs × 3 réglages aléatoires × 40 blocs avec deux trigs :
 **1200 blocs comparés, 0 écart**.
 
-### 7.1 Résultats (22/10/2026)
+### 7.1 Résultats (22/10/2026, `test_maits.py` complet : 64 vérifications, TOUT OK)
 
-`test_maits.py --quick` : démarrage et interface (27 vérifications) OK ; son : `mi_fill` et le demi-bande exacts à
-chaque bloc (18 cas, crête 0,07 de la pleine échelle), chaîne d'ampli de TONE jusqu'au silence (blocs 120), les dix
-moteurs sonnent et diffèrent. Passe complète et `--with` en cours (section suivante).
+- **Seul** : démarrage, interface (27 vérifications) ; `mi_fill` reçoit les cadrans, la note et le trig du §4 et le
+  bloc à 48 kHz est exactement son demi-bande, à chaque bloc (38 cas, crête 0,08 de la pleine échelle) ; chaîne
+  d'ampli de TONE jusqu'au silence ; les dix moteurs sonnent et diffèrent (RMS WSHP −30, FM −28, SWRM −36, GRAN
+  −32, PD −27, CHIP −27, NOIS −33, MODL −41, PART −36 (TIMBRE 127), STRG −40 dBFS) ; moteurs accordés à 8,5 cents
+  près (STRG à la note 36) ; changement de moteur (STRG → MODL) : dès le bloc après le trig, la même note qu'une voix
+  MODL neuve, exactement (le bloc du trig porte encore la queue de l'ancienne note, comme partout) ; réglages,
+  notes et moteurs au hasard dans la pleine échelle ; les 6 machines d'origine identiques au stock ; p-locks de
+  machine ; **6 pistes MAITS ensemble, chacune identique à la même piste jouée seule** (après le §3 « un bruit par
+  piste » ; la première passe complète échouait ici, le LCG étant partagé) ; pistes mêlées.
+- **Avec Model-TG** : démarrage, interface (rangées, descripteurs, CC, enregistrements, touche Attack, écran
+  MACHINES sur 2 lignes, noms, potards) ; mêmes preuves de son ; MAITS avec Model-TG = MAITS seul en sortie de piste.
+- **Charge** (instructions par bloc d'une voix, seul) : WSHP 6 683, FM 6 772, SWRM 5 457, GRAN 8 732, PD 7 846,
+  CHIP 3 738, NOIS 5 885, MODL 7 877, PART 9 148, STRG 5 803 ; TONE 5 291 ; voix muette 236 ; pile 276 o sous la
+  boucle des voix. Au pire (PART) 1,7 fois TONE ; six voix PART ≈ 55 000 instructions par bloc ; la charge réelle
+  reste à mesurer sur la machine `[À FAIRE]`.
+
+- **Avec les autres tweaks de l'OS** (`--quick --with model-tg-st,sample-preview-st,trig-hold,arp,step-rec,
+  tempo-max,boot-anim,multiline-browser,level-pan-values,trigless-dim,midi-live-both,mod-settings,lfo-plus`, tous
+  ceux de `os.json` sauf la version combinée du Syntakt, en conflit, §6) : TOUT OK ; image décompressée jusqu'à
+  `0x401c4320` ; les 6 machines d'origine identiques à ces mods sans MAITS ; MAITS = MAITS avec Model-TG seul en
+  sortie de piste ; p-locks de machine ; pistes mêlées.
 
 ## 8. À essayer sur la machine `[À FAIRE]`
 
 Avec `27-maits.json` seul (`build.py -t maits`) puis avec Model-TG (`-t model-tg-st,maits-tg`) :
 
 - MACHINES : MAITS en 7ᵉ (8ᵉ avec Model-TG), icône de TONE ; les potards Harmonic, Timbre, Morph, Engine ;
-- CONTOUR de 0 à 9 : les dix moteurs, chacun à sa note sur le clavier (WSHP, FM, PD, CHIP, NOIS, STRG) ;
+- CONTOUR de 0 à 9 : les dix moteurs, chacun à sa note sur le clavier (WSHP, FM, PD, CHIP, MODL, STRG) ;
 - DECAY long et court, GATE, PUNCH ; p-locks de COLOR/SHAPE/SWEEP et du moteur ;
 - six pistes MAITS à la fois : la charge (l'écran de la charge de Model-TG) ; PART et SWRM à TIMBRE haut ;
 - retour à une machine d'origine avant de flasher autre chose.
