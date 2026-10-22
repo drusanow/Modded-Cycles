@@ -1153,6 +1153,23 @@ Separate flashing paths, not mods of the Cycles OS:
   with the mods (decision of 10/10/2026, notes/57). Tested on a Model:Samples on 11/10/2026. Original flasher by RDS
   (AIM), integrated by DaftMaple.
 
+### 7.7 MAITS machine (not in the OS yet)
+
+**What it does.** One extra machine, **MAITS**: ten macro engines after Mutable Instruments Plaits. **CONTOUR** picks
+the engine (0–9: WSHP waveshaping, FM, SWRM granular cloud, GRAN grainlets, PD phase distortion, CHIP, NOIS filtered
+noise, MODL modal resonator, PART dust, STRG string); **COLOR** = Harmonics, **SHAPE** = Timbre, **SWEEP** = Morph.
+PITCH, FINE, the keyboard, DECAY, GATE and PUNCH work as on Tone; velocity as on every machine.
+
+**Limits.** One voice per track; a silent MAITS track is not computed. PART at a low Timbre is sparse (a few grains a
+second), as on Plaits. Set MAITS tracks back to an original machine before flashing anything else.
+
+**Why it's out.** OS 2.0 already has seven added machines; an eighth needs a new layout of the machine screen and the
+combined build with the Syntakt engines, MACRO and ACID (notes/74 §6). For now it builds alone (`build.py -t maits`)
+or with Model-TG (`-t model-tg-st,maits-tg`), not with the other added machines.
+
+**Origin.** DavidCaruso's Model-TG Plaits Edition (notes/74), algorithms of Plaits by Émilie Gillet (MIT).
+**Status:** experimental, proven in emulation; no hardware test yet.
+
 ---
 
 ## 8. Open questions
