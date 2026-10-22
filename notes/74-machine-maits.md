@@ -64,10 +64,16 @@ comme MACRO.
 - `mi_trig` (une note ce bloc) remplace `dr_trig`, `mi_obuf` (64 × 4 o) remplace `sampler_buf+32`, `mi_dly` (6 ×
   8192 o, lignes à retard de STRG) remplace `DLY_BASE` ; le test `pk_init` de STRG disparaît (seul `mi_dz` reste) ;
 - **pas de `.data`** (interdit dans une machine ajoutée, la charge utile est remise à zéro) : `mi_eng` garde
-  moteur + 1 (0 = aucun) au lieu de -1, la graine `mi_seed` part de 0 ;
+  moteur + 1 (0 = aucun) au lieu de -1 ;
+- **un bruit par piste** : la Plaits Edition a un seul LCG (`mi_seed`) pour toutes les pistes, si bien qu'une piste
+  ne sonne pas pareil selon ce que jouent les autres (SWRM, GRAN, NOIS, PART, STRG). Ici `mi_fill` charge à
+  l'entrée le LCG de la piste dans `mi_seed` et le range à la sortie (`mi_out`) dans `mi_seeds`, rangé « xor la clé
+  de la piste » (piste × `0x9e3779b9`, `mi_skey`) : depuis les zéros du BSS, chaque piste part de sa propre suite
+  (la piste 0 de 0, comme la Plaits Edition) et deux pistes ne jouent jamais le même bruit. Les moteurs eux-mêmes
+  ne changent pas ;
 - pas d'a6/fp, pas d'EMAC (le MACSR de la boucle des voix ne compte pas) ; garde d2–d7/a2–a5.
 
-Tailles : code 6 628 o, tables 5 574 o, variables 50 316 o (dont 49 152 de lignes à retard) `[FAIT]`.
+Tailles : code 6 690 o, tables 5 574 o, variables 50 340 o (dont 49 152 de lignes à retard) `[FAIT]`.
 
 ## 4. La passerelle (`maits.c`)
 
@@ -94,9 +100,9 @@ seconde à TIMBRE ≤ 64 : le premier grain arrive 0,1 s après le trig à TIMBR
 ## 5. Place
 
 - **Seul** (`27-maits.json`) : charge utile à `0x43000000` (`PAY_ALONE`), 272 556 o une fois en place (code et
-  tables, détours, données copiées, puis ses variables à `+0x36000`), **rangée en 18 564 o** dans l'image
+  tables, détours, données copiées, puis ses variables à `+0x36000`), **rangée en 18 628 o** dans l'image
   (compressée avec l'OS) ; image décompressée jusqu'à `0x401ae9c4`, sous `0x40200000` `[FAIT en émulation]`.
-- **Avec Model-TG** (`36-maits-tg.json`) : à `0x46700000` (`PAY_TG`), rangée en 18 976 o.
+- **Avec Model-TG** (`36-maits-tg.json`) : à `0x46700000` (`PAY_TG`), rangée en 19 040 o.
 - Le code finit avant `gs.STUBS` (`+0x33000`).
 
 ## 6. Pourquoi pas encore dans l'OS
@@ -109,7 +115,7 @@ l'OS demande :
    `MARKS_ROW`, `ROWS7` / `check_room`) et dans `gen_acid_combos.py` (MAITS après ACID, machine 15) ;
 2. le fichier `Syntakt_OS1.42.syx` pour construire et prouver la version combinée (non disponible dans cette
    session : elektron.se n'est pas joignable) ;
-3. la place : le code et les tables de MAITS (13 242 o) se compriment en ~11 091 o (aPLib, estimé), sous les
+3. la place : le code et les tables de MAITS (13 306 o) se compriment en ~11,1 Ko (aPLib, estimé), sous les
    16 948 o qui restent à l'OS 2.0 sous `0x40200000` `[HYP]` ;
 4. la charge : à mesurer avec les autres machines ajoutées sous le régulateur des moteurs (`GOV_SKIP`).
 

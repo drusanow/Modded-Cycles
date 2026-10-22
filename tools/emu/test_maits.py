@@ -444,12 +444,13 @@ def engines(fw, quick):
     worst = max(devs, key=lambda d: abs(d[2]))
     check(abs(worst[2]) < 10, f"pitched engines (WSHP, FM, PD, CHIP, MODL, STRG) at their note: within "
                               f"{abs(worst[2]):.1f} cents ({worst[0]} at note {worst[1]})")
-    # a change of engine starts the new one from rest: the same as a fresh voice on it
+    # a change of engine starts the new one from rest: the same as a fresh voice on it. A note sounds from the
+    # block after its trig; the trig's own block still carries the old note's tail
     a, _, _ = play(fw, eng_kw(9, decay=127), 120, (1, 60), changes={60: dict(contour=7)}, probe=False)
-    b, _, _ = play(fw, eng_kw(7, decay=127), 60, (1,), probe=False)
-    check(np.array_equal(a[60:].ravel()[:32 * 40], b[1:41].ravel()) or
-          np.corrcoef(a[61:100].ravel(), b[1:40].ravel())[0, 1] > 0.999,
-          "a change of engine (STRG -> MODL) on the next trig: the same note as a fresh MODL voice")
+    b, _, _ = play(fw, eng_kw(7, decay=127), 61, (1,), probe=False)
+    check(np.array_equal(a[61:120], b[2:61]) and not b[1].any() and a[60].any(),
+          "a change of engine (STRG -> MODL) on the next trig: from the block after it, the same note as a "
+          "fresh MODL voice, exactly")
     rng = np.random.default_rng(7)
     top, unm_any = 0, False
     for _ in range(20 if not quick else 6):

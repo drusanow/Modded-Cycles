@@ -9,8 +9,9 @@
 | Ported from the PLAITS machine of DavidCaruso's Model-TG Plaits Edition
 | (plaits.inc there), where it renders into Model-TG's Sampler window: the
 | engines are the same instructions; only their inputs and outputs moved here
-| (mi_p, mi_trig, mi_obuf, the delay lines mi_dly) and the state starts at zero
-| (the BSS of the payload). maits.c feeds them from the voice loop.
+| (mi_p, mi_trig, mi_obuf, the delay lines mi_dly), the state starts at zero
+| (the BSS of the payload), and each track has its own noise (mi_seeds), so a
+| track sounds the same whatever the others play. maits.c feeds them from the voice loop.
 |
 | mi_fill(track, note, 0): one block, 64 samples at 96 kHz (4 bytes each, a
 | sample << 15: +-32767 is +-2^30) into mi_obuf, from the four dials mi_p[track]
@@ -291,6 +292,11 @@ mi_fill:
     moveml  %d2-%d7/%a2-%a5,%sp@(64)
     movel   %sp@(108),%d6         | track
     movel   %d6,%sp@(MI_TRK)
+    bsr     mi_skey               | the track's own noise: its LCG into mi_seed
+    lea.l   mi_seeds,%a0
+    movel   %a0@(0,%d6:l:4),%d1
+    eorl    %d0,%d1
+    movel   %d1,mi_seed
     movel   %sp@(112),%d0         | the note, Q8 semitones (60 << 8 = middle C)
     bsr     mi_n2inc
     movel   %d0,%d3               | inc_note: its increment, Q32 at 96 kHz
@@ -329,8 +335,24 @@ mf_same:
     jmp     %a0@
 
 mi_out:
+    movel   %sp@(MI_TRK),%d6      | the track's LCG kept for its next block
+    bsr     mi_skey
+    movel   mi_seed,%d1
+    eorl    %d0,%d1
+    lea.l   mi_seeds,%a0
+    movel   %d1,%a0@(0,%d6:l:4)
     moveml  %sp@(64),%d2-%d7/%a2-%a5
     lea.l   %sp@(104),%sp
+    rts
+
+| d6 = a track -> d0 = its noise key, track x 0x9e3779b9: mi_seeds holds each
+| track's LCG xor its key, so that from the BSS's zeros every track starts its
+| own sequence (track 0 at 0, as the Plaits Edition's one LCG did) and two
+| tracks never play the same noise. Clobbers d1.
+mi_skey:
+    movel   %d6,%d0
+    movel   #0x9e3779b9,%d1
+    mulul   %d1,%d0
     rts
 
     .align 2
@@ -2247,7 +2269,8 @@ msg_lp:
     .align 4
 mi_p:      .space 6*16            | the four dials, Q15 (maits.c)
 mi_eng:    .space 6*4             | the engine each track's state is for, + 1
-mi_seed:   .space 4               | the noise's LCG
+mi_seed:   .space 4               | the noise's LCG, the track's being computed
+mi_seeds:  .space 6*4             | each track's, xor its key (mi_skey)
 mi_trig:   .space 8               | a new note this block (maits.c sets it)
 mi_dz:     .space 8               | a track's delay line has been zeroed
 mi_obuf:   .space 64*4            | the block, 96 kHz

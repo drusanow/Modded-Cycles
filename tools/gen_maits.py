@@ -267,7 +267,7 @@ def build_tweak(img, tg=None):
     out.update({"conflicts": sorted(ids - {tid}), "writes": writes, "append": append})
     # for the proof (tools/emu/test_maits.py): the entry points and the engines' state
     out["symbols"] = {k: f"{syms[k]:#x}" for k in ("maits_update", "maits_render", "mi_fill", "mi_out", "mi_p",
-                                                   "mi_eng", "mi_trig", "mi_obuf", "trk")}
+                                                   "mi_eng", "mi_trig", "mi_obuf", "mi_seed", "mi_seeds", "trk")}
     if not tg:                    # as MACRO and ACID alone: USB sent at a fixed time (notes/35), voice loop
         out = usb_steady.add_to(out)          # (notes/36); the combined version has them through model-tg-st
         out = voice_loop.add_to(out)
