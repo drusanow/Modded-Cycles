@@ -6,9 +6,9 @@ Adresses : VA de l'OS 1.13 (la section 3 commence en `0x40000400`). Un mod qui v
 
 ## En bref
 
-- 283 tweaks, 31 778 écritures.
-- Masques de sprites libérables : 164 (35 960 o), dont 54 pris (18 384 o) et **110 libres (17 576 o)**.
-- Crochets sur l'OS : 102 adresses détournées, dont 56 à l'identique par des mods de familles différentes.
+- 284 tweaks, 31 810 écritures.
+- Masques de sprites libérables : 164 (35 960 o), dont 63 pris (20 112 o) et **101 libres (15 848 o)**.
+- Crochets sur l'OS : 108 adresses détournées, dont 56 à l'identique par des mods de familles différentes.
 - Pointeurs réécrits : 58 adresses. Écritures dans des octets 0xFF hors masques : 14 zones.
 - Charges utiles ajoutées après l'OS : 262 tweaks ; place restante au §3.
 
@@ -42,19 +42,19 @@ Les masques d'un groupe sont identiques octet pour octet et chacun n'est désign
 | `0x401904b4` | `0x400ac784` | pris (370/376 o) | multiline-browser (370 o) |
 | `0x40192734` | `0x400ac2b2` | pris (318/376 o) | trigless-dim (318 o) |
 
-### 48×22 : 42 masques de 192 o (copie gardée `0x4014b364`) : 7 pris, 35 libres (6 720 o)
+### 48×22 : 42 masques de 192 o (copie gardée `0x4014b364`) : 16 pris, 26 libres (4 992 o)
 
 | masque | constante | état | mods (octets écrits) |
 |---|---|---|---|
-| `0x40152d38` | `0x400b9726` | libre | |
-| `0x401592bc` | `0x400b7404` | libre | |
-| `0x4015943c` | `0x400b73e4` | libre | |
-| `0x4015f38c` | `0x400b504a` | libre | |
-| `0x40165fec` | `0x400b28b4` | libre | |
-| `0x40168a84` | `0x400b1bc0` | libre | |
-| `0x40168da4` | `0x400b1b32` | libre | |
-| `0x4016bcd8` | `0x400b12fe` | libre | |
-| `0x4016dab8` | `0x400b0f78` | libre | |
+| `0x40152d38` | `0x400b9726` | pris (120/192 o) | overbridge-exp (120 o) |
+| `0x401592bc` | `0x400b7404` | pris (120/192 o) | overbridge-exp (120 o) |
+| `0x4015943c` | `0x400b73e4` | pris (108/192 o) | overbridge-exp (108 o) |
+| `0x4015f38c` | `0x400b504a` | pris (106/192 o) | overbridge-exp (106 o) |
+| `0x40165fec` | `0x400b28b4` | pris (170/192 o) | overbridge-exp (170 o) |
+| `0x40168a84` | `0x400b1bc0` | pris (152/192 o) | overbridge-exp (152 o) |
+| `0x40168da4` | `0x400b1b32` | pris (188/192 o) | overbridge-exp (188 o) |
+| `0x4016bcd8` | `0x400b12fe` | pris (158/192 o) | overbridge-exp (158 o) |
+| `0x4016dab8` | `0x400b0f78` | pris (122/192 o) | overbridge-exp (122 o) |
 | `0x4016fae8` | `0x400b0b20` | libre | |
 | `0x40170c48` | `0x400b08da` | libre | |
 | `0x40171a48` | `0x400b06ec` | libre | |
@@ -547,6 +547,11 @@ Instructions de l'OS remplacées par un détour (`jsr`, `jmp`, `bsr.l`, `bra.l`)
 | `0x40002a06` | `206f002422414281d1c5…` | jmp | masque `0x4015c044` +0x17c | 6ch-usbup | notes/36 |
 | `0x40002a42` | `721320402004e3ace788…` | jmp | OS `0x4019b182` | 6ch-multiout |  |
 | `0x40002a42` | `721320402004e3ace788…` | jmp | masque `0x4015c044` +0x11e | 6ch-usbup | notes/36 |
+| `0x4000453c` | `0c80a10100006600043e…` | jmp | masque `0x4016dab8` +0x0 `ob_vendor` | overbridge-exp | notes/75 |
+| `0x40004806` | `4eb940002836` | jsr | masque `0x401592bc` +0x58 `ob_in_stop` | overbridge-exp | notes/75 |
+| `0x40004810` | `4eb940002778` | jsr | masque `0x401592bc` +0x0 `ob_in_start` | overbridge-exp | notes/75 |
+| `0x40004844` | `4eb9400028d2` | jsr | masque `0x4015943c` +0x50 `ob_out_stop` | overbridge-exp | notes/75 |
+| `0x4000484e` | `4eb940002862` | jsr | masque `0x4015943c` +0x0 `ob_out_start` | overbridge-exp | notes/75 |
 | `0x4000576c` | `45f940004e40` | lea a2 | masque `0x4016b6f8` +0x14 `usb_boot` | mod-settings | notes/72 |
 | `0x40005f36` | `b2ac00286730` | jmp | masque `0x4018dba8` +0x0 | trigless-dim | notes/45 |
 | `0x40006086` | `4ef94008e77e` | jmp | masque `0x4018dba8` +0x20 | trigless-dim | notes/45 |
@@ -594,9 +599,12 @@ Instructions de l'OS remplacées par un détour (`jsr`, `jmp`, `bsr.l`, `bra.l`)
 | `0x40058ca0` | `a93c00000020` | jsr | masque `0x4015c044` +0x1f8 | 6ch-usbup, acid, macro, macro-acid, mod-settings, model-tg, model-tg-st, syntakt-* (32/32), syntakt-*-acid (31/31), syntakt-*-macro (31/31), syntakt-*-macro-acid (31/31) | notes/31, notes/36, notes/72 |
 | `0x40058e28` | `72ff242a0008202a000c` | jsr | masque `0x4018a788` +0x0 | arp | notes/32 |
 | `0x4005910e` | `4aaa0030670c2002` | jsr | masque `0x40183118` +0x0 `pv_copy` | sample-preview, sample-preview-st | notes/46 |
+| `0x40059338` | `4eb940002ae0` | jsr | masque `0x40168da4` +0x0 `ob_read` | overbridge-exp | notes/75 |
 | `0x40059382` | `4eb94005979e` | jsr | charge utile (mémoire), 24 cibles selon la combinaison | syntakt-* (32/32), syntakt-*-acid (31/31), syntakt-*-macro (31/31), syntakt-*-macro-acid (31/31), syntakt-tg-* (33/33), syntakt-tg-*-acid (31/31), syntakt-tg-*-macro (31/31), syntakt-tg-*-macro-acid (31/31) | notes/31, notes/36 |
 | `0x40059392` | `4eb940002912` | jsr | masque `0x4015c044` +0x292 | 6ch-usbup, acid, macro, macro-acid, mod-settings, model-tg, model-tg-st, syntakt-* (32/32), syntakt-*-acid (31/31), syntakt-*-macro (31/31), syntakt-*-macro-acid (31/31) | notes/31, notes/36, notes/72 |
+| `0x40059392` | `4eb940002912` | jsr | masque `0x40165fec` +0x0 `ob_write` | overbridge-exp | notes/75 |
 | `0x400593ce` | `4eb940002912` | jsr | masque `0x4015c044` +0x292 | 6ch-usbup, acid, macro, macro-acid, mod-settings, model-tg, model-tg-st, syntakt-* (32/32), syntakt-*-acid (31/31), syntakt-*-macro (31/31), syntakt-*-macro-acid (31/31) | notes/31, notes/36, notes/72 |
+| `0x400593ce` | `4eb940002912` | jsr | masque `0x40165fec` +0x0 `ob_write` | overbridge-exp | notes/75 |
 | `0x400597c6` | `4eb940091ab2` | jsr | masque `0x401835b8` +0x8e `lfo_audio` | lfo-plus | notes/56 |
 | `0x4005981e` | `4eb9401b715c` | jsr | charge utile (mémoire) +0x3350e | syntakt-tg-* (1/33) | notes/31 |
 | `0x40059852` | `4eb940056f58` | jsr | masque `0x4014ab5c` +0x0 `tf_post` | track-filter | notes/47 |
@@ -778,4 +786,5 @@ Nombre d'écritures de chaque sorte (une plage pour une famille de moteurs).
 | midi-both | 3 | 3 | 0 | 0 | 0 | 0 | 0 |  | notes/53 |
 | midi-live-both | 6 | 0 | 4 | 0 | 1 | 1 | 0 |  | notes/53 |
 | lfo-plus | 30 | 0 | 12 | 4 | 7 | 7 | 0 |  | notes/56 |
+| overbridge-exp | 32 | 6 | 8 | 0 | 9 | 9 | 0 |  | notes/75 |
 

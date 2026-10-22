@@ -123,3 +123,62 @@ MIDI du système. `[À FAIRE]` : trouver le traitement des requêtes 1 et 2 dans
   canaux depuis l'hôte. Les notes et les potards passent par le MIDI USB du Cycles (interfaces 4 et 5).
 - **Pico 2** : non pour Overbridge (Full Speed seulement, §En bref). Possible en appareil MIDI (DIN ou USB) à côté,
   sans retour audio : le Cycles n'a pas d'entrée audio.
+
+## 6. L'expérience sur le Cycles (22/10/2026) `[FAIT en émulation]`
+
+Tweak `70-overbridge-exp.json` (`tools/gen_overbridge.py`, `tools/machines/overbridge/ob.S`, preuve
+`tools/emu/test_overbridge.py`). **Hors de l'OS** : il prend les mêmes appels que l'envoi USB à heure fixe, le 6 canaux et
+Mod Settings, et des masques ou crochets de Model-TG, MACRO, ACID et des moteurs du Syntakt (`conflicts`). On le
+construit seul sur l'OS d'origine : `build.py -t overbridge-exp`.
+
+### 6.1 Ce que fait le tweak
+
+- **Le mode 5 (USB AUDIO/MIDI)** devient Overbridge : entrée 4 de la table `0x4013e538` (activation `ob_act`, fin
+  `ob_deact`, longueur de la configuration), PID `0x7ff0` dans le descripteur d'appareil `0x4019b3fe`, configuration de
+  249 o écrite sur celle de l'audio USB (`0x4019b2b6`, 328 o) : IAD + interfaces vendor 0..3 (1 et 2 : alt 0..3, EP
+  0x83 / 0x03 interrupt, 32 / 88 / **256** o, intervalle 1 ; 3 sans point d'accès), puis IAD + MIDI USB (4 contrôle,
+  5 MIDI streaming, EP 0x01 / 0x81 bulk 512 o). Les modes USB MIDI et CDC (`CONFIG › UPGRADE`) ne changent pas.
+- **Activation** : la fin d'origine (`0x40002c56`), la remise à zéro des réserves SRAM (`0x40002da8`), têtes de file des
+  points d'accès 7 et 6 (max 1 024, pas de dTD), `ENDPTCTRL3 = 0x00cc00cc`, puis la partie MIDI d'origine
+  (`0x4000311c`).
+- **`SET_INTERFACE`** (`0x400047c6`, mode 5) : les numéros d'interface échangés (`0x400047ea`, `0x40004818`) et les
+  quatre appels de démarrage / arrêt dirigés vers `ob_in_*` / `ob_out_*`.
+- **Requêtes vendor** : `0x4000453c` (la fin de la chaîne de comparaisons du répartiteur `0x4000448c`) saute vers
+  `ob_vendor` : `0xC0` 1 → « Model:Cycles » (32 o), `0xC0` 2 → « 0001        0.01 » (16 o) ; `0xA1` 1 continue vers
+  `0x400048c6` comme avant, le reste est bloqué (stall) comme avant.
+- **Le son** : `0x40059392` et `0x400593ce` (envoi du bloc, `0x40002912`) → `ob_write` ; `0x40059338` (lecture de
+  l'entrée USB, `0x40002ae0`) → `ob_read`.
+  - vers l'hôte : 8 canaux, Main L/R (`0x40fe4b90`) et les 6 pistes (`0x80001858`), en blocs de 7 trames ; ring de
+    8 blocs ; un bloc dont le dTD est encore en file (l'hôte ne lit pas) est abandonné et compté, jamais réécrit ;
+  - depuis l'hôte : 6 dTD de réception ; les blocs lus vont dans une FIFO de 256 trames ; un dTD n'est remis en
+    file que si la FIFO a de la place (l'hôte attend, NAK) ; lecture après 64 trames de préremplissage ; canaux 1 et 2
+    → le tampon de l'entrée USB (`0x40fe4cf0`), que l'OS mélange à sa sortie comme l'audio USB d'origine ; canaux 3..8
+    reçus mais pas joués (pour un Sidecar).
+- **Mémoire** : code dans 9 masques 48×22 libérés (1 296 o) ; blocs dans le trou au-dessus du BSS, par l'alias sans
+  cache (`0x4a33a000`, 8 + 6 blocs de 256 o), FIFO et état en cache (`0x4233b000`, `0x4233d000`) ; dTD dans les
+  réserves SRAM d'origine (`0x80008000`, `0x80008800`), libres dans ce mode.
+
+### 6.2 Preuve (`test_overbridge.py`, 25 vérifications, TOUT OK)
+
+- descripteurs : configuration parcourue jusqu'à sa longueur, alt 3 des interfaces 1 et 2 (256 o, interrupt,
+  chaque micro-trame), MIDI en 4 et 5, PID ; taille de bloc = celle du fichier d'appareil d'Overwitch ;
+- par le vrai répartiteur de l'OS : nom et version (et tronqués à `wLength`), `0xA1` 1 inchangé, autres requêtes
+  vendor bloquées, `GET_DESCRIPTOR` rend les nôtres ;
+- `SET_INTERFACE` : interface 1 = flux vers l'hôte, 2 = depuis l'hôte, marche / arrêt, 6 dTD en file, plus d'appel aux
+  routines d'origine ;
+- activation : `ENDPTCTRL3`, têtes de file, partie MIDI d'origine appelée avec son argument ;
+- avec la vraie routine de mise en file de l'OS (`0x40003f94`) : dTD chaînés dans l'ordre sur le point d'accès 7 ;
+- vers l'hôte, 3 000 blocs : chaque trame (Main L/R, pistes 1..6) une fois, dans l'ordre, compteur exact ; hôte
+  arrêté 50 ms puis 2 ms : 351 blocs abandonnés, exactement ceux comptés, aucun bloc en file réécrit ;
+- depuis l'hôte, 2 s : rafales de 24 blocs (comme Overwitch) à +50 et −80 ppm, hôte toujours prêt (FIFO bornée,
+  219 trames), hôte arrêté 0,2 s : canaux 1 et 2 joués à partir de la trame 0, sans trou ni répétition, silence pendant
+  l'arrêt puis reprise ;
+- sans flux : rien n'est envoyé, l'entrée est silencieuse (comme l'OS d'origine sans hôte).
+- Coût : `ob_write` ~1 450 instructions par bloc, `ob_read` ~1 400, flux actifs (environ 3 % d'un bloc).
+
+### 6.3 À essayer sur la machine `[À FAIRE]`
+
+Firmware construit à part (jamais publié) ; un Linux ou un Raspberry Pi avec Overwitch et le fichier d'appareil
+(`gen_overbridge.py --overwitch ~/.config/overwitch/devices.d/model-cycles.json`). Ce que l'émulation ne peut pas
+dire : si le contrôleur traite les points d'accès interrupt comme prévu, si l'hôte accepte la configuration,
+la latence et la charge réelles. Retour à l'OS d'origine : menu de démarrage (MIDI IN) ou `CONFIG › UPGRADE` par USB.

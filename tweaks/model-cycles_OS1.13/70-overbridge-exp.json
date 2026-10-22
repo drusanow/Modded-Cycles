@@ -1,0 +1,335 @@
+{
+ "id": "overbridge-exp",
+ "order": 70,
+ "name": "EXP\u00c9RIENCE : mode Overbridge (pour Overwitch)",
+ "description": [
+  "Exp\u00e9rience, hors de l'OS (notes/75). Le mode USB AUDIO/MIDI devient un appareil Overbridge 2 (interfaces",
+  "vendor, points d'acc\u00e8s interrupt 0x83 / 0x03 en haute vitesse, blocs de 7 trames), 8 canaux dans chaque",
+  "sens : vers l'h\u00f4te Main L/R et les 6 pistes, depuis l'h\u00f4te 8 canaux dont 1 et 2 dans la sortie",
+  "principale. PID 0x7ff0 ; l'h\u00f4te est Overwitch (Linux), avec le fichier d'appareil de",
+  "tools/gen_overbridge.py --overwitch. Le MIDI USB reste ; les autres modes USB ne changent pas.",
+  "Code dans neuf masques de sprites lib\u00e9r\u00e9s (1244 o), blocs, FIFO et \u00e9tat en 0x4233a000..0x4233d100, au-dessus du BSS. G\u00e9n\u00e9r\u00e9 par tools/gen_overbridge.py."
+ ],
+ "device": "Model:Cycles",
+ "os": "1.13",
+ "section": 3,
+ "conflicts": [
+  "6ch-multiout",
+  "6ch-usbup",
+  "mod-settings",
+  "syntakt-bits-acid",
+  "syntakt-bits-macro-acid",
+  "syntakt-bits-macro",
+  "syntakt-bits-swarm-acid",
+  "syntakt-bits-swarm-macro-acid",
+  "syntakt-bits-swarm-macro",
+  "syntakt-bits-swarm",
+  "syntakt-bits",
+  "syntakt-cp-acid",
+  "syntakt-cp-bits-acid",
+  "syntakt-cp-bits-macro-acid",
+  "syntakt-cp-bits-macro",
+  "syntakt-cp-bits-swarm-acid",
+  "syntakt-cp-bits-swarm-macro-acid",
+  "syntakt-cp-bits-swarm-macro",
+  "syntakt-cp-bits-swarm",
+  "syntakt-cp-bits",
+  "syntakt-cp-macro-acid",
+  "syntakt-cp-macro",
+  "syntakt-cp-swarm-acid",
+  "syntakt-cp-swarm-macro-acid",
+  "syntakt-cp-swarm-macro",
+  "syntakt-cp-swarm",
+  "syntakt-cp-toy-acid",
+  "syntakt-cp-toy-bits-acid",
+  "syntakt-cp-toy-bits-macro-acid",
+  "syntakt-cp-toy-bits-macro",
+  "syntakt-cp-toy-bits-swarm-acid",
+  "syntakt-cp-toy-bits-swarm-macro-acid",
+  "syntakt-cp-toy-bits-swarm-macro",
+  "syntakt-cp-toy-bits-swarm",
+  "syntakt-cp-toy-bits",
+  "syntakt-cp-toy-macro-acid",
+  "syntakt-cp-toy-macro",
+  "syntakt-cp-toy-swarm-acid",
+  "syntakt-cp-toy-swarm-macro-acid",
+  "syntakt-cp-toy-swarm-macro",
+  "syntakt-cp-toy-swarm",
+  "syntakt-cp-toy",
+  "syntakt-cp",
+  "syntakt-sd-acid",
+  "syntakt-sd-bits-acid",
+  "syntakt-sd-bits-macro-acid",
+  "syntakt-sd-bits-macro",
+  "syntakt-sd-bits-swarm-acid",
+  "syntakt-sd-bits-swarm-macro-acid",
+  "syntakt-sd-bits-swarm-macro",
+  "syntakt-sd-bits-swarm",
+  "syntakt-sd-bits",
+  "syntakt-sd-cp-acid",
+  "syntakt-sd-cp-bits-acid",
+  "syntakt-sd-cp-bits-macro-acid",
+  "syntakt-sd-cp-bits-macro",
+  "syntakt-sd-cp-bits-swarm-acid",
+  "syntakt-sd-cp-bits-swarm-macro-acid",
+  "syntakt-sd-cp-bits-swarm-macro",
+  "syntakt-sd-cp-bits-swarm",
+  "syntakt-sd-cp-bits",
+  "syntakt-sd-cp-macro-acid",
+  "syntakt-sd-cp-macro",
+  "syntakt-sd-cp-swarm-acid",
+  "syntakt-sd-cp-swarm-macro-acid",
+  "syntakt-sd-cp-swarm-macro",
+  "syntakt-sd-cp-swarm",
+  "syntakt-sd-cp-toy-acid",
+  "syntakt-sd-cp-toy-bits-acid",
+  "syntakt-sd-cp-toy-bits-macro-acid",
+  "syntakt-sd-cp-toy-bits-macro",
+  "syntakt-sd-cp-toy-bits-swarm-acid",
+  "syntakt-sd-cp-toy-bits-swarm-macro-acid",
+  "syntakt-sd-cp-toy-bits-swarm-macro",
+  "syntakt-sd-cp-toy-bits-swarm",
+  "syntakt-sd-cp-toy-bits",
+  "syntakt-sd-cp-toy-macro-acid",
+  "syntakt-sd-cp-toy-macro",
+  "syntakt-sd-cp-toy-swarm-acid",
+  "syntakt-sd-cp-toy-swarm-macro-acid",
+  "syntakt-sd-cp-toy-swarm-macro",
+  "syntakt-sd-cp-toy-swarm",
+  "syntakt-sd-cp-toy",
+  "syntakt-sd-cp",
+  "syntakt-sd-macro-acid",
+  "syntakt-sd-macro",
+  "syntakt-sd-swarm-acid",
+  "syntakt-sd-swarm-macro-acid",
+  "syntakt-sd-swarm-macro",
+  "syntakt-sd-swarm",
+  "syntakt-sd-toy-acid",
+  "syntakt-sd-toy-bits-acid",
+  "syntakt-sd-toy-bits-macro-acid",
+  "syntakt-sd-toy-bits-macro",
+  "syntakt-sd-toy-bits-swarm-acid",
+  "syntakt-sd-toy-bits-swarm-macro-acid",
+  "syntakt-sd-toy-bits-swarm-macro",
+  "syntakt-sd-toy-bits-swarm",
+  "syntakt-sd-toy-bits",
+  "syntakt-sd-toy-macro-acid",
+  "syntakt-sd-toy-macro",
+  "syntakt-sd-toy-swarm-acid",
+  "syntakt-sd-toy-swarm-macro-acid",
+  "syntakt-sd-toy-swarm-macro",
+  "syntakt-sd-toy-swarm",
+  "syntakt-sd-toy",
+  "syntakt-sd",
+  "syntakt-swarm-acid",
+  "syntakt-swarm-macro-acid",
+  "syntakt-swarm-macro",
+  "syntakt-swarm",
+  "syntakt-toy-acid",
+  "syntakt-toy-bits-acid",
+  "syntakt-toy-bits-macro-acid",
+  "syntakt-toy-bits-macro",
+  "syntakt-toy-bits-swarm-acid",
+  "syntakt-toy-bits-swarm-macro-acid",
+  "syntakt-toy-bits-swarm-macro",
+  "syntakt-toy-bits-swarm",
+  "syntakt-toy-bits",
+  "syntakt-toy-macro-acid",
+  "syntakt-toy-macro",
+  "syntakt-toy-swarm-acid",
+  "syntakt-toy-swarm-macro-acid",
+  "syntakt-toy-swarm-macro",
+  "syntakt-toy-swarm",
+  "syntakt-toy",
+  "macro-acid",
+  "macro",
+  "acid",
+  "model-tg-st",
+  "model-tg",
+  "syntakt-meter"
+ ],
+ "symbols": {
+  "ob_act": "0x40152d38",
+  "ob_deact": "0x40152d9e",
+  "ob_dtd": "0x4015f3b6",
+  "ob_in_flush": "0x4015931a",
+  "ob_in_start": "0x401592bc",
+  "ob_in_stop": "0x40159314",
+  "ob_name": "0x4016db02",
+  "ob_out_flush": "0x40159492",
+  "ob_out_start": "0x4015943c",
+  "ob_out_stop": "0x4015948c",
+  "ob_play": "0x4016bd3c",
+  "ob_read": "0x40168da4",
+  "ob_rx_prime": "0x4015f38c",
+  "ob_rx_take": "0x4016bcec",
+  "ob_silence": "0x4016bcd8",
+  "ob_tx_begin": "0x40168a84",
+  "ob_tx_end": "0x40168aae",
+  "ob_vendor": "0x4016dab8",
+  "ob_vers": "0x4016db22",
+  "ob_write": "0x40165fec"
+ },
+ "writes": [
+  {
+   "off": 16700,
+   "old": "0c80a10100006600043e6000037e",
+   "new": "4ef94016dab84e714e714e714e71"
+  },
+  {
+   "off": 17386,
+   "old": "123c0002",
+   "new": "123c0001"
+  },
+  {
+   "off": 17414,
+   "old": "4eb940002836",
+   "new": "4eb940159314"
+  },
+  {
+   "off": 17424,
+   "old": "4eb940002778",
+   "new": "4eb9401592bc"
+  },
+  {
+   "off": 17432,
+   "old": "7201",
+   "new": "7202"
+  },
+  {
+   "off": 17476,
+   "old": "4eb9400028d2",
+   "new": "4eb94015948c"
+  },
+  {
+   "off": 17486,
+   "old": "4eb940002862",
+   "new": "4eb94015943c"
+  },
+  {
+   "off": 364344,
+   "old": "4eb940002ae0",
+   "new": "4eb940168da4"
+  },
+  {
+   "off": 364434,
+   "old": "4eb940002912",
+   "new": "4eb940165fec"
+  },
+  {
+   "off": 364494,
+   "old": "4eb940002912",
+   "new": "4eb940165fec"
+  },
+  {
+   "off": 723832,
+   "old": "4016dab8",
+   "new": "4014b364"
+  },
+  {
+   "off": 724734,
+   "old": "4016bcd8",
+   "new": "4014b364"
+  },
+  {
+   "off": 726834,
+   "old": "40168da4",
+   "new": "4014b364"
+  },
+  {
+   "off": 726976,
+   "old": "40168a84",
+   "new": "4014b364"
+  },
+  {
+   "off": 730292,
+   "old": "40165fec",
+   "new": "4014b364"
+  },
+  {
+   "off": 740426,
+   "old": "4015f38c",
+   "new": "4014b364"
+  },
+  {
+   "off": 749540,
+   "old": "4015943c",
+   "new": "4014b364"
+  },
+  {
+   "off": 749572,
+   "old": "401592bc",
+   "new": "4014b364"
+  },
+  {
+   "off": 758566,
+   "old": "40152d38",
+   "new": "4014b364"
+  },
+  {
+   "off": 1303000,
+   "old": "40002ca840002c56",
+   "new": "40152d3840152d9e"
+  },
+  {
+   "off": 1303008,
+   "old": "4019b3fe4019b2b600000148",
+   "new": "4019b3fe4019b2b6000000f9"
+  },
+  {
+   "off": 1386808,
+   "old": "fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00",
+   "new": "4eb940002c564eb940002da842b94233d00042b94233d014203c0400000041f9800001c0612241f980000180611a203c00cc00cc23c0fc0b01cc2f2f00044eb94000311c588f4e75208042a80004223cdead00012141000842a8000c42a8003042a800344e7542b94233d00042b94233d0144ef940002c56"
+  },
+  {
+   "off": 1412796,
+   "old": "fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00",
+   "new": "40c146fc270042b94233d000615041f94a33a000203c000001ff429853806afa41f980008000700742a8000441e8004053806af442b94233d00442b94233d00842b94233d00c42b94233d010700123c04233d00046c14e7542b94233d000203c0008000023c0fc0b01b442b9800001f042b9800001f44e75"
+  },
+  {
+   "off": 1413180,
+   "old": "fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00",
+   "new": "2f0240c246fc270042b94233d014614642b94233d01842b94233d01c42b94233d02042b94233d02442b94233d02870002f004eb94015f38c201f52807206b08166ee700123c04233d01446c2241f4e7542b94233d014700823c0fc0b01b442b9800001b042b9800001b44e75"
+  },
+  {
+   "off": 1437580,
+   "old": "fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00ffff",
+   "new": "202f00042200ed8941f980008800d1c1e18806804a33a80061102f08487800064eb940003f94508f4e7543e80010720b429953816afa223cdead00012081223c01000080214100042140000822000681000010000281fffff0002141000c223c00000100214100204e75"
+  },
+  {
+   "off": 1465324,
+   "old": "fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00ffff",
+   "new": "202f00040c8040fe4b906600009c4ab94233d000670000924fefffd848d73cfc246f002c47f9800018582e2f00307c0024394233d00866064eb940168a844ab94233d010664020394233d004e1882202eb89d08106804a33a0202a402006e7882af208002af208042006e58841f308002ad02ae800802ae801002ae801802ae802002ae80280528223c24233d0087007b48066064eb940168aae5286bc8766904cd73cfc4fef00284e75"
+  },
+  {
+   "off": 1476228,
+   "old": "fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00",
+   "new": "20394233d004ed88068080008000204070000828000700076708700152b94233d02c23c04233d0104e754ab94233d010665822394233d0042001e18806804a33a000224032bc070030394233d00e334000022009ed8906818000800020414eb94015f3b62f08487800074eb940003f94508f52b94233d03820394233d00452807207c08123c04233d00442b94233d0085eb94233d00c4e75"
+  },
+  {
+   "off": 1477028,
+   "old": "fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00",
+   "new": "4fefffd848d73cfc4ab94233d014670000947e0520394233d0240c80000000f96e4c2c394233d0182006ed880680800088002840082c000700076632202c00044840028000007fff66064eb94016bcec2f064eb94015f38c588f52867006bc8066027c0023c64233d01853876aa620394233d028661620394233d0240c80000000406d20700123c04233d02820394233d024b0af00306c1442b94233d02852b94233d0304eb94016bcd860064eb94016bd3c4cd73cfc4fef00284e75"
+  },
+  {
+   "off": 1489112,
+   "old": "fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00ffff",
+   "new": "206f0030202f003453804298429853806af84e752006e18806804a33a820204020394233d01c72062400eb8a06824233b000224222d822d822d822d822d822d822d822d852800280000000ff53816ad823c04233d01c5eb94233d02452b94233d0344e75206f0030222f003493b94233d02420394233d02053812400eb8a06824233b000224220d920d152800280000000ff53816ae423c04233d0204e75"
+  },
+  {
+   "off": 1496760,
+   "old": "fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00fffffc00ffff",
+   "new": "0c80a101000066064ef9400048c641fa003a0c80c0010000671241fa004e0c80c0020000670a4ef940004982702060027010b0816f0220012f082f004eb940004438508f4ef9400049b64d6f64656c3a4379636c65730000000000000000000000000000000000000000303030312020202020202020302e3031"
+  },
+  {
+   "off": 1683126,
+   "old": "09020000050100c003080b0003010020000904000000010120000924010002085d000008240a0101010000112402030101000102000000000000000011240205020600010200000000000000000c24030401030002010000000c240306010100050100000012240602030000000000000000000000000009040100000102200009040101020102200010240103000101000000020000000000062402010420070503053800010825010000000000070582110400010904020000010220000904020101010220001024010600010100000002000000000006240201042007058325380001082501000000000009040300000101000009240100",
+   "new": "0902f900060100c000080b0004ff0000000904000000ff0000000904010000ff0000000904010101ff000000070583032000010904010201ff000000070583035800010904010301ff000000070583030001010904020000ff0000000904020101ff000000070503032000010904020201ff000000070503035800010904020301ff000000070503030001010904030000ff000000080b0402010100000904040000010100000924010001090001050904050002010300000724010001410006240201010006240202020009240301030102010009240302040101010009050102000200000005250101010905810200020000000525010103"
+  },
+  {
+   "off": 1683454,
+   "old": "12010002ef02014035191b00010001020301",
+   "new": "12010002ef0201403519f07f010001020301"
+  }
+ ]
+}
